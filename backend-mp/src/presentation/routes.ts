@@ -1,4 +1,5 @@
 import { type Response, Router } from "express";
+import { UserRoutes } from "./user/user.routes.js";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: Es necesaria
 export class AppRoutes {
@@ -8,6 +9,8 @@ export class AppRoutes {
 		router.get("/", (_, res: Response) => {
 			res.json({ message: "Backend MP funcionando" });
 		});
+
+		router.use("/user", UserRoutes.routes);
 
 		return router;
 	}
