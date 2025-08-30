@@ -11,4 +11,6 @@ export const envs = {
 	DB_NAME: get("DB_NAME").required().asString(),
 	DB_ENCRYPT: get("DB_ENCRYPT").required().asBool(),
 	DB_TRUSTSERVERCERTIFICATE: get("DB_TRUSTSERVERCERTIFICATE").required().asBool(),
+	JWT_SEED: get("JWT_SEED").required().asString(),
+	ACCEPTED_ORIGINS: get("ACCEPTED_ORIGINS").required().asString(),
 };

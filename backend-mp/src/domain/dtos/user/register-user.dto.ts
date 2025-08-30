@@ -16,27 +16,29 @@ export class RegisterUserDTO {
 	static create(object: { [key: string]: any }): [string | null, RegisterUserDTO?] {
 		const { identification, names, lastNames, birthDate, email, password, roles } = object;
 
-		if (!identification) return ["Missing identification"];
-		if (identification.length > 50) return ["The identification cannot be longer than 30"];
+		if (!identification) return ["Campo identificación es obligatorio"];
+		if (identification.length > 50)
+			return ["Campo identificación no puede ser mayor de 50 caracteres"];
 
-		if (!names) return ["Missing names"];
-		if (names.length > 50) return ["The names cannot be longer than 50"];
+		if (!names) return ["Campo nombres es obligatorio"];
+		if (names.length > 50) return ["Campo nombre no puede ser mayor de 50 caracteres"];
 
-		if (!lastNames) return ["Missing last names"];
-		if (lastNames.length > 50) return ["the last names cannot be greater than 50"];
+		if (!lastNames) return ["Campo apellidos es obligatorio"];
+		if (lastNames.length > 50) return ["Campo apellidos no puede ser mayor de 50 caracteres"];
 
-		if (!birthDate) return ["Missing birthDate"];
-		if (!isAdult(birthDate)) return ["The person must be of legal"];
+		if (!birthDate) return ["Campo fecha de nacimiento es obligatorio"];
+		if (!isAdult(birthDate)) return ["La fecha de nacimiento debe ser mayor o igual a 18 años"];
 
-		if (!email) return ["Missing email"];
-		if (email.length > 100) return ["the last names cannot be greater than 100"];
-		if (!regexEmail().test(email)) return ["Email is not valid"];
+		if (!email) return ["Campo correo es obligatorio"];
+		if (email.length > 100) return ["Campo correo no puede ser mayor de 100 caracteres"];
+		if (!regexEmail().test(email)) return ["Campo inválido"];
 
-		if (!password) return ["Missing password"];
-		if (password.length < 6) return ["Password too short"];
+		if (!password) return ["Campo contraseña es obligatorio"];
+		if (password.length < 6) return ["Contraseña debe ser mayor a 5 caracteres"];
 
-		if (!roles) return ["Missing roles"];
-		if (!Array.isArray(roles)) return ["The roles are an array"];
+		if (!roles) return ["Campo roles es obligatorio"];
+		if (!Array.isArray(roles)) return ["Los roles son un arreglo"];
+		if (roles.length === 0) return ["Debe existir un rol"];
 
 		return [
 			null,

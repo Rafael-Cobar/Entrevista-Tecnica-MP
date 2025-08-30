@@ -17,7 +17,11 @@ async function main() {
 			process.exit(0);
 		});
 
-		const server = new Server({ port: envs.PORT, routes: AppRoutes.routes });
+		const server = new Server({
+			port: envs.PORT,
+			routes: AppRoutes.routes,
+			acceptedOrigins: envs.ACCEPTED_ORIGINS,
+		});
 		server.start();
 	} catch (error) {
 		console.log("error starting server", error);

@@ -1,26 +1,31 @@
 import express from "express";
 import morgan from "morgan";
+import { corsMiddleware } from "../config/adapters/cors.adapter.js";
 
 interface Options {
 	port?: number;
 	routes: express.Router;
+	acceptedOrigins: string;
 }
 
 export class Server {
 	public readonly app = express();
 	private readonly port: number;
 	private readonly routes: express.Router;
+	private readonly acceptedOrigins: string;
 
 	constructor(options: Options) {
-		const { port = 3000, routes } = options;
+		const { port = 3000, routes, acceptedOrigins } = options;
 		this.port = port;
 		this.routes = routes;
+		this.acceptedOrigins = acceptedOrigins;
 	}
 
 	async initMiddlewares() {
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
 		this.app.use(morgan("dev"));
+		this.app.use(corsMiddleware(this.acceptedOrigins));
 	}
 
 	async start() {
