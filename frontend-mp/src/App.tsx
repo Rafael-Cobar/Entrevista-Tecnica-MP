@@ -6,7 +6,6 @@ const App = () => {
 	return (
 		<>
 			<RouterProvider router={router} />
-			<h1 className="font-bold text-3xl">Casos - MP</h1>
 			<Toaster
 				theme="system"
 				position="bottom-right"

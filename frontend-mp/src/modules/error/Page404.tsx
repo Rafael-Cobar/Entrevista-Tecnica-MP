@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import { MdComputer, MdError } from "react-icons/md";
 import { TbError404 } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 
 const Page404 = () => {
 	const navigate = useNavigate();

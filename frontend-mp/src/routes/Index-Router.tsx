@@ -1,9 +1,11 @@
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import { ROUTES } from "./routes";
 import LoginPage from "../modules/auth/login/page/LoginPage";
 import Page404 from "../modules/error/Page404";
 import PublicRoutes from "./components/PublicRoutes";
-import ProtectedRoutes from "./components/ProtectedRoutes";
+import { ROUTES } from "./routes";
+
+const LazyHome = lazy(() => import("../modules/home/HomePage"));
 
 export const router = createBrowserRouter([
 	{
@@ -11,8 +13,8 @@ export const router = createBrowserRouter([
 		children: [{ path: ROUTES.login, element: <LoginPage /> }],
 	},
 	{
-		element: <ProtectedRoutes />,
-		children: [],
+		element: <PublicRoutes />,
+		children: [{ path: ROUTES.home, element: <LazyHome /> }],
 	},
 	{
 		path: "*",
