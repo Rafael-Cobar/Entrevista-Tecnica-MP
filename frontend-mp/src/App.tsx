@@ -1,8 +1,22 @@
+import { RouterProvider } from "react-router-dom";
+import { Toaster } from "sonner";
+import { router } from "./routes/Index-Router";
+
 const App = () => {
 	return (
-		<div>
+		<>
+			<RouterProvider router={router} />
 			<h1 className="font-bold text-3xl">Casos - MP</h1>
-		</div>
+			<Toaster
+				theme="system"
+				position="bottom-right"
+				dir="auto"
+				visibleToasts={6}
+				duration={5000}
+				closeButton
+				richColors
+			/>
+		</>
 	);
 };
 
