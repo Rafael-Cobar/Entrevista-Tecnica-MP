@@ -1,0 +1,67 @@
+services:
+  sqlservermp:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlservermp
+    restart: always
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: aA123456*
+      MSSQL_PID: Developer
+    ports:
+      - "1433:1433"
+    networks:
+      - ss-network
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./init.sql:/db/init.sql
+      - ./entrypoint.sh:/entrypoint.sh
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+
+  backend-mp:
+    container_name: backend-mp
+    build: ../backend-mp
+    restart: always
+    environment:
+      PORT: 3000
+      NODE_ENV: dev
+      DB_USER: sa
+      DB_PASS: aA123456*
+      DB_SERVER: sqlservermp
+      DB_PORT: 1433
+      DB_NAME: db_mp
+      DB_ENCRYPT: false
+      DB_TRUSTSERVERCERTIFICATE: true
+      JWT_SEED: ministerio_publico
+      ACCEPTED_ORIGINS: http://localhost:3000,http://localhost:5173,http://localhost,http://127.0.0.1,*
+    depends_on:
+      - sqlservermp
+    ports:
+      - "3000:3000"
+    networks:
+      - ss-network
+
+  frontend-mp:
+    container_name: frontend-mp
+    build:
+      context: ../frontend-mp
+      args:
+        VITE_API: http://localhost:3000
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend-mp
+    volumes:
+      - ../frontend-mp/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - ss-network
+
+networks:
+  ss-network:
+    driver: bridge
+
+
+volumes:
+  sqlserver_data:
