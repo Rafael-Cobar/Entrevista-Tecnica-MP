@@ -2,6 +2,7 @@ import { type Response, Router } from "express";
 import { UserRoutes } from "./user/user.routes.js";
 import { AuthRoutes } from "./auth/auth.route.js";
 import { FiscaliaRoutes } from "./fiscalia/auth.route.js";
+import { CasesRoutes } from "./cases/cases.routes.js";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: Es necesaria
 export class AppRoutes {
@@ -14,7 +15,8 @@ export class AppRoutes {
 
 		router.use("/user", UserRoutes.routes);
 		router.use("/auth", AuthRoutes.routes);
-		router.use("/fiscalias", FiscaliaRoutes.routes);
+		router.use("/fiscalia", FiscaliaRoutes.routes);
+		router.use("/case", CasesRoutes.routes);
 
 		return router;
 	}
