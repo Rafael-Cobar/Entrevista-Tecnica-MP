@@ -49,4 +49,20 @@ export class UserDB {
 			return { success: false };
 		}
 	}
+
+	public async getUser(idUser: number) {
+		try {
+			const db = Database.getInstance();
+			const pool = await db.connect();
+			const result = await pool.request().input("id_usuario", idUser).execute("sp_UsuarioActivo");
+
+			if (!result.recordset || result.recordset.length === 0) {
+				return false;
+			}
+			return Boolean(result.recordset[0].activo);
+		} catch (error) {
+			console.error("Error get user:", error);
+			return false;
+		}
+	}
 }

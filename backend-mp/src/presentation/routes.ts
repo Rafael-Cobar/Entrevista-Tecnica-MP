@@ -3,6 +3,7 @@ import { UserRoutes } from "./user/user.routes.js";
 import { AuthRoutes } from "./auth/auth.route.js";
 import { FiscaliaRoutes } from "./fiscalia/fiscalias.route.js";
 import { CasesRoutes } from "./cases/cases.routes.js";
+import { validateJWT } from "./middlewares/auth.middleware.js";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: Es necesaria
 export class AppRoutes {
@@ -13,10 +14,10 @@ export class AppRoutes {
 			res.json({ message: "Backend MP funcionando" });
 		});
 
-		router.use("/user", UserRoutes.routes);
+		router.use("/user", [validateJWT], UserRoutes.routes);
 		router.use("/auth", AuthRoutes.routes);
-		router.use("/fiscalia", FiscaliaRoutes.routes);
-		router.use("/case", CasesRoutes.routes);
+		router.use("/fiscalia", [validateJWT], FiscaliaRoutes.routes);
+		router.use("/case", [validateJWT], CasesRoutes.routes);
 
 		return router;
 	}

@@ -12,11 +12,11 @@ export const generateToken = (payload: any, duration: number = 2 * 60 * 60 * 60)
 	});
 };
 
-export const validateToken = (token: string) => {
+export const validateToken = <T>(token: string): Promise<T | null> => {
 	return new Promise((resolve) => {
 		jwt.verify(token, JWT_SEED, (err, decoded) => {
 			if (err) return resolve(null);
-			return resolve(decoded);
+			resolve(decoded as T);
 		});
 	});
 };

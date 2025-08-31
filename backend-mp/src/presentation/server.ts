@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import { corsMiddleware } from "../config/adapters/cors.adapter.js";
+import cookieParser from "cookie-parser";
 
 interface Options {
 	port?: number;
@@ -26,6 +27,7 @@ export class Server {
 		this.app.use(express.urlencoded({ extended: true }));
 		this.app.use(morgan("dev"));
 		this.app.use(corsMiddleware(this.acceptedOrigins));
+		this.app.use(cookieParser());
 	}
 
 	async start() {
