@@ -1,7 +1,7 @@
 import { type Response, Router } from "express";
 import { UserRoutes } from "./user/user.routes.js";
 import { AuthRoutes } from "./auth/auth.route.js";
-import { FiscaliaRoutes } from "./fiscalia/auth.route.js";
+import { FiscaliaRoutes } from "./fiscalia/fiscalias.route.js";
 import { CasesRoutes } from "./cases/cases.routes.js";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: Es necesaria
