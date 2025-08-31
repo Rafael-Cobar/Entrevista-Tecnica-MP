@@ -47,9 +47,6 @@ export class CasesController {
 	};
 
 	getCases = (req: Request, res: Response) => {
-		const { idUser } = req.params;
-		console.log(idUser);
-		console.log(req.params);
 		const [error, getCasesDTO] = GetCasesDTO.create(req.params);
 
 		if (error || getCasesDTO === undefined) {

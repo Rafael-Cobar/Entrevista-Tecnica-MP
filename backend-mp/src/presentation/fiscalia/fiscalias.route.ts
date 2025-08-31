@@ -14,6 +14,7 @@ export class FiscaliaRoutes {
 
 		// TODO: middleware
 		router.get("/", fiscaliasController.getActiveFiscalias);
+		router.get("/:idUser", fiscaliasController.getUsuarioByFiscalias);
 
 		return router;
 	}

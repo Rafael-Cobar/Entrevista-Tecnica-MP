@@ -10,7 +10,6 @@ export class GetCasesDTO {
 		if (idUser === "*") {
 			idUser = null;
 		} else {
-			console.log(idUser);
 			if (Number.isNaN(Number(idUser))) return ["Campo id Usuario debe ser un número"];
 		}
 
