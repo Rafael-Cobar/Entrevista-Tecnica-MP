@@ -44,4 +44,18 @@ export class CasesController {
 			)
 			.catch((error) => handleError(error, res));
 	};
+
+	getCases = (_req: Request, res: Response) => {
+		this.caseService
+			.getCases()
+			.then((cases) =>
+				handleSuccess({
+					data: cases,
+					res,
+					statusCode: 200,
+					message: "Casos obtenidos",
+				}),
+			)
+			.catch((error) => handleError(error, res));
+	};
 }

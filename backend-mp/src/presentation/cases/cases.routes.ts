@@ -17,6 +17,7 @@ export class CasesRoutes {
 		// TODO: falta JWT
 		router.post("/", casesController.insertCase);
 		router.post("/assign", casesController.assignUseToCase);
+		router.get("/", casesController.getCases);
 
 		return router;
 	}

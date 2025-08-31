@@ -1,6 +1,6 @@
 import type { InsertCaseDTO } from "../../../domain/dtos/case/insert-case.dto.js";
 import { ProcessStates } from "../../../domain/states/states.js";
-import type { IGetCase } from "../../../interface/case/case.interface.js";
+import type { IGetCase, NewCase } from "../../../interface/case/case.interface.js";
 import { Database } from "../sqlserver-database.js";
 
 export class CasesDB {
@@ -87,6 +87,40 @@ export class CasesDB {
 		} catch (error) {
 			console.error("Error add fail log insert", error);
 			return false;
+		}
+	}
+
+	public async getDataCases() {
+		try {
+			const db = Database.getInstance();
+			const pool = await db.connect();
+			const result = await pool.request().execute("sp_getCases");
+
+			if (!result.recordset || result.recordset.length === 0) {
+				return null;
+			}
+			const response = result.recordset;
+
+			const newCases: NewCase[] = response.map((c) => ({
+				idCase: c.id_caso,
+				title: c.titulo,
+				description: c.descripcion,
+				idState: c.id_estado,
+				state: c.estado,
+				idProcessState: c.id_estado_proceso,
+				processState: c.proceso,
+				date: c.fecha_creacion,
+				idFiscalia: c.id_fiscalia,
+				fiscalia: c.fiscalia,
+				idUser: c.id_usuario,
+				names: c.nombres,
+				lastName: c.apellidos,
+				identification: c.no_identificacion,
+			}));
+			return newCases;
+		} catch (error) {
+			console.error("Error obtener caso:", error);
+			return null;
 		}
 	}
 }

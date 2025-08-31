@@ -60,4 +60,8 @@ export class CasesService {
 		if (!resultAssign)
 			throw CustomError.internalServer("Existió un problema al asignar el usuario");
 	}
+
+	public async getCases() {
+		return await this.casesDB.getDataCases();
+	}
 }
