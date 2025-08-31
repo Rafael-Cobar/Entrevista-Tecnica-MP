@@ -4,6 +4,7 @@ import { handleError } from "../utils/handle-error.js";
 import type { CasesService } from "./cases.service.js";
 import { handleSuccess } from "../utils/handle-success.js";
 import { AssignUserToCaseDTO } from "../../domain/dtos/case/assign-user-case.dto.js";
+import { GetCasesDTO } from "../../domain/dtos/case/get-cases.dto.js";
 
 export class CasesController {
 	constructor(private readonly caseService: CasesService) {}
@@ -45,9 +46,19 @@ export class CasesController {
 			.catch((error) => handleError(error, res));
 	};
 
-	getCases = (_req: Request, res: Response) => {
+	getCases = (req: Request, res: Response) => {
+		const { idUser } = req.params;
+		console.log(idUser);
+		console.log(req.params);
+		const [error, getCasesDTO] = GetCasesDTO.create(req.params);
+
+		if (error || getCasesDTO === undefined) {
+			handleError(error, res, 400);
+			return;
+		}
+
 		this.caseService
-			.getCases()
+			.getCases(getCasesDTO?.idUser)
 			.then((cases) =>
 				handleSuccess({
 					data: cases,

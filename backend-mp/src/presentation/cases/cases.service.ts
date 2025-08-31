@@ -61,7 +61,7 @@ export class CasesService {
 			throw CustomError.internalServer("Existió un problema al asignar el usuario");
 	}
 
-	public async getCases() {
-		return await this.casesDB.getDataCases();
+	public async getCases(idUser: number | null) {
+		return await this.casesDB.getDataCases(idUser);
 	}
 }

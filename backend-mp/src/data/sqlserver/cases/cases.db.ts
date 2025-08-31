@@ -90,15 +90,12 @@ export class CasesDB {
 		}
 	}
 
-	public async getDataCases() {
+	public async getDataCases(idUser: number | null) {
 		try {
 			const db = Database.getInstance();
 			const pool = await db.connect();
-			const result = await pool.request().execute("sp_getCases");
+			const result = await pool.request().input("id_usuario", idUser).execute("sp_getCases");
 
-			if (!result.recordset || result.recordset.length === 0) {
-				return null;
-			}
 			const response = result.recordset;
 
 			const newCases: NewCase[] = response.map((c) => ({
