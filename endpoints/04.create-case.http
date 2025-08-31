@@ -1,0 +1,29 @@
+###
+POST http://localhost:3000/case
+Content-Type: application/json
+
+{
+  "title": "Robo en comercio local",
+  "description": "Se reporta un robo en una tienda del centro de la ciudad, se buscan testigos y evidencias.",
+  "idFiscalia": 1
+}
+
+###
+POST http://localhost:3000/case
+Content-Type: application/json
+
+{
+  "title": "Accidente de tránsito grave",
+  "description": "Choque entre dos vehículos en la avenida principal, con heridos. Se requiere investigación de causas.",
+  "idFiscalia": 2
+}
+
+###
+POST http://localhost:3000/case
+Content-Type: application/json
+
+{
+  "title": "Denuncia por fraude electrónico",
+  "description": "Ciudadano reporta fraude en transacciones bancarias en línea, se deben recopilar registros y evidencias digitales.",
+  "idFiscalia": 1
+}
