@@ -1,4 +1,4 @@
-import type { IFiscalia } from "../../../interface/fiscalias/fiscalias.interface.js";
+import type { FiscaliaUser, IFiscalia } from "../../../interface/fiscalias/fiscalias.interface.js";
 import { Database } from "../sqlserver-database.js";
 
 export class FiscaliasDB {
@@ -37,6 +37,33 @@ export class FiscaliasDB {
 				idMunicipality: response.id_municipio,
 			};
 			return fiscalias;
+		} catch (error) {
+			console.error("Error obtener fiscalia:", error);
+			return null;
+		}
+	}
+
+	public async getUsersByFiscalia(idFiscalia: number | null, idUsuario: number | null) {
+		try {
+			const db = Database.getInstance();
+			const pool = await db.connect();
+			const result = await pool
+				.request()
+				.input("id_fiscalia", idFiscalia)
+				.input("id_usuario", idUsuario)
+				.execute("sp_UsuariosPorFiscalia");
+
+			const response = result.recordset;
+
+			const users: FiscaliaUser[] = response.map((f) => ({
+				idUsuario: f.id_usuario,
+				names: f.nombres,
+				lastNames: f.apellidos,
+				identification: f.no_identificacion,
+				idFiscaliaUsuario: f.id_fiscalia_usuario,
+				idFiscalia: f.id_fiscalia,
+			}));
+			return users;
 		} catch (error) {
 			console.error("Error obtener fiscalia:", error);
 			return null;
