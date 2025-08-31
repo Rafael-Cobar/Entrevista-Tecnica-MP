@@ -1,7 +1,7 @@
-import { Router } from "express";
-import { UserDB } from "../../data/sqlserver/user/user.db.js";
-import { UserController } from "./user.controller.js";
-import { UserService } from "./user.service.js";
+import { Router } from 'express';
+import { UserDB } from '../../data/sqlserver/user/user.db.js';
+import { UserController } from './user.controller.js';
+import { UserService } from './user.service.js';
 
 // biome-ignore lint/complexity/noStaticOnlyClass: E
 export class UserRoutes {
@@ -12,8 +12,7 @@ export class UserRoutes {
 		const userService = new UserService(userDB);
 		const userController = new UserController(userService);
 
-		// TODO: falta JWT
-		router.post("/", userController.registerUser);
+		router.post('/', userController.registerUser);
 
 		return router;
 	}

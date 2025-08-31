@@ -1,0 +1,8 @@
+###
+POST http://localhost:3000/case/assign
+Content-Type: application/json
+
+{
+  "idCase": 1,
+  "idUser": 1
+}
