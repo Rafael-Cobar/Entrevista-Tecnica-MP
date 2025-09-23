@@ -3,6 +3,7 @@ import { ROUTES } from "../../routes/routes";
 
 export default function HomePage() {
 	const navigate = useNavigate();
+
 	return (
 		<div className="min-h-screen flex flex-col bg-gray-50">
 			<header className="bg-blue-600 text-white py-6 shadow-md">

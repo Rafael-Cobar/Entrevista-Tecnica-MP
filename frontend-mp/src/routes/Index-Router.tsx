@@ -4,6 +4,7 @@ import LoginPage from "../modules/auth/login/page/LoginPage";
 import Page404 from "../modules/error/Page404";
 import PublicRoutes from "./components/PublicRoutes";
 import { ROUTES } from "./routes";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 const LazyHome = lazy(() => import("../modules/home/HomePage"));
 
@@ -13,7 +14,7 @@ export const router = createBrowserRouter([
 		children: [{ path: ROUTES.login, element: <LoginPage /> }],
 	},
 	{
-		element: <PublicRoutes />,
+		element: <ProtectedRoutes />,
 		children: [{ path: ROUTES.home, element: <LazyHome /> }],
 	},
 	{
