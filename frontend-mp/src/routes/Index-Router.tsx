@@ -5,6 +5,7 @@ import Page404 from "../modules/error/Page404";
 import PublicRoutes from "./components/PublicRoutes";
 import { ROUTES } from "./routes";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import MainLayout from "../layouts/main-layout/MainLayout";
 
 const LazyHome = lazy(() => import("../modules/home/HomePage"));
 
@@ -15,7 +16,12 @@ export const router = createBrowserRouter([
 	},
 	{
 		element: <ProtectedRoutes />,
-		children: [{ path: ROUTES.home, element: <LazyHome /> }],
+		children: [
+			{
+				element: <MainLayout />,
+				children: [{ path: ROUTES.home, element: <LazyHome /> }],
+			},
+		],
 	},
 	{
 		path: "*",
