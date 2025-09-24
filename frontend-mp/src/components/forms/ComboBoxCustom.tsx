@@ -68,21 +68,22 @@ export function ComboBoxCustom({
 						<CommandList>
 							<CommandEmpty>Sin resultados</CommandEmpty>
 							<CommandGroup>
-								{data.map((framework) => (
+								{data.map((d) => (
 									<CommandItem
-										key={framework.value}
-										value={framework.value}
+										key={d.value}
+										value={d.label}
+										keywords={[d.value]}
 										onSelect={() => {
-											onValueChange(framework.value);
+											onValueChange(d.value);
 											setOpen(false);
 										}}
 										className="w-full justify-between"
 									>
-										{framework.label}
+										{d.label}
 										<Check
 											className={cn(
 												"ml-auto",
-												value === framework.value ? "opacity-100" : "opacity-0",
+												value === d.value ? "opacity-100" : "opacity-0",
 											)}
 										/>
 									</CommandItem>

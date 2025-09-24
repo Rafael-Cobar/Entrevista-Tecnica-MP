@@ -35,10 +35,6 @@ export const router = createBrowserRouter([
 								path: ROUTES.case_management.create_case,
 								element: <LazyCreateCase />,
 							},
-							{
-								path: ROUTES.case_management.assign_user.path,
-								element: <LazyAssignUserCase />,
-							},
 						],
 					},
 				],
@@ -48,5 +44,9 @@ export const router = createBrowserRouter([
 	{
 		path: "*",
 		element: <Page404 />,
+	},
+	{
+		path: ROUTES.case_management.assign_user.path,
+		element: <LazyAssignUserCase />,
 	},
 ]);
