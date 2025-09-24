@@ -6,8 +6,15 @@ import PublicRoutes from "./components/PublicRoutes";
 import { ROUTES } from "./routes";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import MainLayout from "../layouts/main-layout/MainLayout";
+import AdminProtectedRoutes from "./components/AdminRoutes";
 
 const LazyHome = lazy(() => import("../modules/home/HomePage"));
+const LazyCreateCase = lazy(
+	() => import("../modules/case-management/create-case/page/CreateCasePage"),
+);
+const LazyAssignUserCase = lazy(
+	() => import("../modules/case-management/assign-user/page/AssignUserPage"),
+);
 
 export const router = createBrowserRouter([
 	{
@@ -19,7 +26,22 @@ export const router = createBrowserRouter([
 		children: [
 			{
 				element: <MainLayout />,
-				children: [{ path: ROUTES.home, element: <LazyHome /> }],
+				children: [
+					{ path: ROUTES.home, element: <LazyHome /> },
+					{
+						element: <AdminProtectedRoutes />,
+						children: [
+							{
+								path: ROUTES.case_management.create_case,
+								element: <LazyCreateCase />,
+							},
+							{
+								path: ROUTES.case_management.assign_user.path,
+								element: <LazyAssignUserCase />,
+							},
+						],
+					},
+				],
 			},
 		],
 	},

@@ -10,7 +10,7 @@ export const items = [
 	},
 	{
 		title: "Gestión de casos",
-		to: "/",
+		to: ROUTES.case_management.create_case,
 		icon: Text,
 	},
 ];
