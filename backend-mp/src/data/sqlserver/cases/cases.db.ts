@@ -1,3 +1,4 @@
+import type { ChangeCaseStateDTO } from "../../../domain/dtos/case/change-case-state.dto.js";
 import type { InsertCaseDTO } from "../../../domain/dtos/case/insert-case.dto.js";
 import type { UpdateCaseDTO } from "../../../domain/dtos/case/update-case.dto.js";
 import { ProcessStates } from "../../../domain/states/states.js";
@@ -139,6 +140,25 @@ export class CasesDB {
 			return updated;
 		} catch (error) {
 			console.error("Error updating case:", error);
+			return false;
+		}
+	}
+
+	public async changeCaseState(changes: ChangeCaseStateDTO): Promise<boolean> {
+		const { idCase, idState, idUser } = changes;
+		try {
+			const db = Database.getInstance();
+			const pool = await db.connect();
+			await pool
+				.request()
+				.input("id_caso", idCase)
+				.input("id_estado_proceso_actual", idState)
+				.input("id_usuario_actual", idUser)
+				.execute("sp_CambiarEstadoCaso");
+
+			return true;
+		} catch (error) {
+			console.error("Error cambiar estado proceso del caso:", error);
 			return false;
 		}
 	}

@@ -18,6 +18,7 @@ export class CasesRoutes {
 		router.post("/assign", casesController.assignUseToCase);
 		router.get("/:idUser", casesController.getCases);
 		router.get("/xml/:idUser", casesController.getCasesXML);
+		router.patch("/state", casesController.changeCaseProcessState);
 		router.patch("/:id", casesController.updateCase);
 
 		return router;

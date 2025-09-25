@@ -8,6 +8,7 @@ import { GetCasesDTO } from "../../domain/dtos/case/get-cases.dto.js";
 import { getCSV } from "../../config/adapters/csv.adapter.js";
 import type { NewCase } from "../../interface/case/case.interface.js";
 import { UpdateCaseDTO } from "../../domain/dtos/case/update-case.dto.js";
+import { ChangeCaseStateDTO } from "../../domain/dtos/case/change-case-state.dto.js";
 
 export class CasesController {
 	constructor(private readonly caseService: CasesService) {}
@@ -113,6 +114,22 @@ export class CasesController {
 		this.caseService
 			.updateCase(updateCaseDTO)
 			.then(() => handleSuccess({ data: null, res, statusCode: 201, message: "Caso Actualizado" }))
+			.catch((error) => handleError(error, res));
+	};
+
+	changeCaseProcessState = (req: Request, res: Response) => {
+		const [error, changeCaseStateDTO] = ChangeCaseStateDTO.create(req.body);
+
+		if (error || !changeCaseStateDTO) {
+			handleError(error, res, 400);
+			return;
+		}
+
+		this.caseService
+			.changeCaseProcessState(changeCaseStateDTO)
+			.then(() =>
+				handleSuccess({ data: null, res, statusCode: 201, message: "Estado Actualizado" }),
+			)
 			.catch((error) => handleError(error, res));
 	};
 }

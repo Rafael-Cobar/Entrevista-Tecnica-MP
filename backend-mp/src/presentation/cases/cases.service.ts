@@ -1,6 +1,7 @@
 import type { CasesDB } from "../../data/sqlserver/cases/cases.db.js";
 import type { FiscaliasDB } from "../../data/sqlserver/fiscalias/fiscalias.db.js";
 import type { AssignUserToCaseDTO } from "../../domain/dtos/case/assign-user-case.dto.js";
+import type { ChangeCaseStateDTO } from "../../domain/dtos/case/change-case-state.dto.js";
 import type { InsertCaseDTO } from "../../domain/dtos/case/insert-case.dto.js";
 import type { UpdateCaseDTO } from "../../domain/dtos/case/update-case.dto.js";
 import { CustomError } from "../../domain/index.js";
@@ -94,5 +95,39 @@ export class CasesService {
 		const result = await this.casesDB.updateCase(dataBody);
 		if (!result)
 			throw CustomError.internalServer("Existió un problema al actualizar la información");
+	}
+
+	public async changeCaseProcessState(dataBody: ChangeCaseStateDTO) {
+		// 1. Verificar que el caso exista y este activo
+		const dataCase = await this.casesDB.getDataCase(dataBody.idCase);
+		if (!dataCase) throw CustomError.notFound("No existe el caso");
+
+		// Verificar que el caso este activo
+		if (dataCase.idState !== States.ACTIVE)
+			throw CustomError.badRequest("El caso no se encuentra activo");
+
+		if (dataCase.idProcessState === ProcessStates.COMPLETED)
+			throw CustomError.badRequest(
+				"El caso no se puede cambiar el estado porque ya fue completado",
+			);
+
+		if (
+			dataCase.idProcessState === ProcessStates.PENDING &&
+			dataBody.idState !== ProcessStates.INPROCESS
+		)
+			throw CustomError.badRequest("El caso solo puede pasar de PENDIENTE a EN PROGRESO");
+
+		if (
+			dataCase.idProcessState === ProcessStates.INPROCESS &&
+			dataBody.idState !== ProcessStates.COMPLETED
+		)
+			throw CustomError.badRequest("El caso solo puede pasar de EN PROGRESO a COMPLETADO");
+
+		// Actualizar registro
+		const result = await this.casesDB.changeCaseState(dataBody);
+		if (!result)
+			throw CustomError.internalServer(
+				"Existió un problema al actualizar el estado del proceso del caso",
+			);
 	}
 }
