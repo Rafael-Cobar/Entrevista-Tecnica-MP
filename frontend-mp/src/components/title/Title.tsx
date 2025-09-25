@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 type Props = {
 	title: string;
 	hideBackBtn?: boolean;
+	to?: string;
 };
 
-const Title = ({ title, hideBackBtn = false }: Props) => {
+const Title = ({ title, hideBackBtn = false, to }: Props) => {
 	const navigate = useNavigate();
 
 	return (
@@ -16,7 +17,7 @@ const Title = ({ title, hideBackBtn = false }: Props) => {
 					<button
 						type="button"
 						className="text-4xl text-gt hover:text-gtDark bg-blue-400/50 rounded-full"
-						onClick={() => navigate(-1)}
+						onClick={() => (to ? navigate(to) : navigate(-1))}
 					>
 						<MdOutlineChevronLeft />
 					</button>

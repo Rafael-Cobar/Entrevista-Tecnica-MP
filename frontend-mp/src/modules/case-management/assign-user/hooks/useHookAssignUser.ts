@@ -7,7 +7,9 @@ import { ENDPOINTS } from "@/endpoints/endpoints";
 import { getErrorAxios } from "@/utils/errorAxios";
 import type { UsersByFiscalia } from "../interface/users-fiscalia.interface";
 import { assignUserSchema } from "../validators/assign-user-schema";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useStoreCase } from "@/store/zustand/case/useStoreCase";
+import { ROUTES } from "@/routes/routes";
 
 type FormCreateCase = {
 	idUser: string;
@@ -21,7 +23,10 @@ interface ComboBox {
 export default function useHookAssignUser() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [users, setUsers] = useState<ComboBox[]>([]);
+	const dataCase = useStoreCase((state) => state.data);
+	const clearDataCase = useStoreCase((state) => state.clearData);
 	const params = useParams();
+	const navigate = useNavigate();
 
 	const {
 		formState: { errors },
@@ -39,7 +44,14 @@ export default function useHookAssignUser() {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: necesario
 	useEffect(() => {
+		if (!dataCase.id) {
+			navigate(ROUTES.case_management.cases);
+			return;
+		}
 		getUsers();
+		return () => {
+			clearDataCase();
+		};
 	}, []);
 
 	const clearForm = () => {
@@ -83,12 +95,13 @@ export default function useHookAssignUser() {
 	});
 
 	return {
+		clearForm,
 		control,
+		dataCase,
 		errors,
 		isLoading,
-		users,
-		register,
 		onSubmit,
-		clearForm,
+		register,
+		users,
 	};
 }

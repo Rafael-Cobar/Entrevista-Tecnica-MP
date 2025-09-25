@@ -10,6 +10,7 @@ import type { FiscaliasComboBox } from "../interface/fiscalias.inteface";
 import { createCaseSchema } from "../validators/create-case-schema";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
+import { useStoreCase } from "@/store/zustand/case/useStoreCase";
 
 type FormCreateCase = {
 	title: string;
@@ -25,6 +26,8 @@ export default function useHookCreateCase() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [fiscalias, setFiscalias] = useState<FiscaliasComboBox[]>([]);
 	const navigate = useNavigate();
+	const setData = useStoreCase((state) => state.setData);
+	const clearDataCase = useStoreCase((state) => state.clearData);
 
 	const {
 		formState: { errors },
@@ -44,6 +47,7 @@ export default function useHookCreateCase() {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: necesario
 	useEffect(() => {
+		clearDataCase();
 		getFiscalias();
 	}, []);
 
@@ -76,12 +80,22 @@ export default function useHookCreateCase() {
 				url: ENDPOINTS.postCase,
 				body: data,
 			});
+			const fiscalia = fiscalias.find((f) => f.value === data.idFiscalia);
 			toast.success("Caso Creado");
 			clearForm();
+
+			setData({
+				id: dataResponse.idCase,
+				title: data.title,
+				description: data.description,
+				fiscalia: {
+					value: fiscalia?.value,
+					label: fiscalia?.label,
+				},
+			});
 			navigate(
 				`${ROUTES.case_management.assign_user.path_navigate}/${dataResponse.idCase}`,
 			);
-			// TODO: mandar data a la asignación de usuario
 		} catch (error: unknown) {
 			toast.error(getErrorAxios(error));
 		} finally {
