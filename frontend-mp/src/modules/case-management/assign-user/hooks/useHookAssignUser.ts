@@ -24,7 +24,6 @@ export default function useHookAssignUser() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [users, setUsers] = useState<ComboBox[]>([]);
 	const dataCase = useStoreCase((state) => state.data);
-	const clearDataCase = useStoreCase((state) => state.clearData);
 	const params = useParams();
 	const navigate = useNavigate();
 
@@ -49,9 +48,6 @@ export default function useHookAssignUser() {
 			return;
 		}
 		getUsers();
-		return () => {
-			clearDataCase();
-		};
 	}, []);
 
 	const clearForm = () => {
@@ -63,7 +59,10 @@ export default function useHookAssignUser() {
 			const usersRes = await getAxios<UsersByFiscalia[]>({
 				url: ENDPOINTS.getUsersFiscalia,
 			});
-			const users = usersRes.map((u) => ({
+			const u = usersRes.filter(
+				(u) => u.identification !== dataCase.fiscal?.identification,
+			);
+			const users = u.map((u) => ({
 				value: `${u.idUsuario}`,
 				label: `${u.identification} - ${u.names} ${u.lastNames}`,
 			}));

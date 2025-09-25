@@ -4,4 +4,5 @@ export const ENDPOINTS = Object.freeze({
 	postCase: "/case",
 	getUsersFiscalia: "/fiscalia/*",
 	assignUserCase: "/case/assign",
+	getCases: "/case",
 });

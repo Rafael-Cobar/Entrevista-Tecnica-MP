@@ -92,6 +92,7 @@ export default function useHookCreateCase() {
 					value: fiscalia?.value,
 					label: fiscalia?.label,
 				},
+				processState: "Pendiente",
 			});
 			navigate(
 				`${ROUTES.case_management.assign_user.path_navigate}/${dataResponse.idCase}`,

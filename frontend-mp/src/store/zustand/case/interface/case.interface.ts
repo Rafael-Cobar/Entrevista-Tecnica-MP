@@ -10,6 +10,7 @@ export interface Case {
 	description: string;
 	fiscalia: Fiscalia;
 	fiscal?: Fiscal | null;
+	processState: string;
 }
 
 export interface Fiscalia {
@@ -18,8 +19,8 @@ export interface Fiscalia {
 }
 
 export interface Fiscal {
-	id: number | string;
-	names: string;
-	lastNames: string;
-	identification: string;
+	id?: number | string | null;
+	names: string | null;
+	lastNames: string | null;
+	identification: string | null;
 }
