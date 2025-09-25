@@ -162,4 +162,58 @@ export class CasesDB {
 			return false;
 		}
 	}
+
+	public async getCaseLogs(idCase: number) {
+		try {
+			const db = Database.getInstance();
+			const pool = await db.connect();
+			const result = await pool.request().input("id_caso", idCase).execute("sp_GetCaseBitacora");
+
+			if (!result.recordset || result.recordset.length === 0) {
+				return [];
+			}
+
+			const response = result.recordset;
+
+			const bitacora = response.map((b: any) => ({
+				idBitacora: b.id_bitacora,
+				date: b.fecha,
+				reason: b.motivo,
+				typeLog: b.tipo_bitacora,
+				currentProcess: b.estado_proceso_actual,
+				currentUser: b.usuario_actual,
+			}));
+			return bitacora;
+		} catch (error) {
+			console.error("Error obtener bitácora del caso:", error);
+			return null;
+		}
+	}
+
+	public async getCaseAssignments(idCase: number) {
+		try {
+			const db = Database.getInstance();
+			const pool = await db.connect();
+			const result = await pool.request().input("id_caso", idCase).execute("sp_GetCaseAssignments");
+
+			if (!result.recordset || result.recordset.length === 0) {
+				return [];
+			}
+
+			const response = result.recordset;
+
+			const assignments = response.map((a: any) => ({
+				idAssignment: a.id_asignacion,
+				dateCreated: a.fecha_creacion,
+				dateUpdated: a.fecha_actualizacion,
+				user: a.usuario,
+				identification: a.no_identificacion,
+				state: a.estado,
+			}));
+			return assignments;
+		} catch (error) {
+			console.error("Error obtener asignaciones del caso:", error);
+			return null;
+		}
+	}
 }

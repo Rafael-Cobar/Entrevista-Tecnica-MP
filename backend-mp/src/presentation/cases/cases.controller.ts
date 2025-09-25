@@ -9,6 +9,7 @@ import { getCSV } from "../../config/adapters/csv.adapter.js";
 import type { NewCase } from "../../interface/case/case.interface.js";
 import { UpdateCaseDTO } from "../../domain/dtos/case/update-case.dto.js";
 import { ChangeCaseStateDTO } from "../../domain/dtos/case/change-case-state.dto.js";
+import { DataCaseDTO } from "../../domain/dtos/case/data-case.dto.js";
 
 export class CasesController {
 	constructor(private readonly caseService: CasesService) {}
@@ -130,6 +131,20 @@ export class CasesController {
 			.then(() =>
 				handleSuccess({ data: null, res, statusCode: 201, message: "Estado Actualizado" }),
 			)
+			.catch((error) => handleError(error, res));
+	};
+
+	dataCaseById = (req: Request, res: Response) => {
+		const [error, dataCaseDTO] = DataCaseDTO.create(req.params);
+
+		if (error || !dataCaseDTO) {
+			handleError(error, res, 400);
+			return;
+		}
+
+		this.caseService
+			.dataCaseById(dataCaseDTO)
+			.then((data) => handleSuccess({ data, res, statusCode: 200, message: "Datos del caso" }))
 			.catch((error) => handleError(error, res));
 	};
 }
