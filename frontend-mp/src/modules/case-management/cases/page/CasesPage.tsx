@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 
 const CasesPage = () => {
-	const { isAdmin, cases, columns } = useCasesPage();
+	const { isAdmin, cases, columns, download } = useCasesPage();
 
 	return (
 		<section className="space-y-6">
@@ -25,6 +25,7 @@ const CasesPage = () => {
 					<button
 						type="button"
 						className="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition"
+						onClick={download}
 					>
 						<Download className="h-4 w-4" />
 						Descargar informe

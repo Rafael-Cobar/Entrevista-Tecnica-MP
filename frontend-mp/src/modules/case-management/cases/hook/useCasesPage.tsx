@@ -1,7 +1,7 @@
 import { useStoreAuth } from "@/store/zustand/auth/useStoreAuth";
 import { useEffect, useState } from "react";
 import type { Case } from "../interface/cases.interface";
-import { getAxios } from "@/libs/axios.adapter";
+import { getAxios, instanceAxios } from "@/libs/axios.adapter";
 import { ENDPOINTS } from "@/endpoints/endpoints";
 import { getErrorAxios } from "@/utils/errorAxios";
 import { useStoreGlobal } from "@/store/zustand/global/useStoreGlobal";
@@ -12,6 +12,7 @@ import { TooltipCustom } from "@/components/tooltip/TooltipCustom";
 import { useStoreCase } from "@/store/zustand/case/useStoreCase";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
+import axios from "axios";
 
 export default function useCasesPage() {
 	const roles = useStoreAuth((state) => state.user.roles);
@@ -78,6 +79,40 @@ export default function useCasesPage() {
 		navigate(ROUTES.case_management.case);
 	};
 
+	const download = async () => {
+		try {
+			addLoader();
+			const response = await instanceAxios.get(
+				`${ENDPOINTS.downloadXMLCase}/${isAdmin ? "*" : idUser}`,
+				{
+					responseType: "blob",
+				},
+			);
+
+			const disposition = response.headers["content-disposition"];
+			let fileName = "cases.csv";
+
+			if (disposition && disposition.includes("filename=")) {
+				const match = disposition.match(/filename="?([^"]+)"?/);
+				if (match?.[1]) fileName = match[1];
+			}
+
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement("a");
+			link.href = url;
+			link.setAttribute("download", fileName);
+			document.body.appendChild(link);
+			link.click();
+
+			link.remove();
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			toast.error(getErrorAxios(error));
+		} finally {
+			reduceLoader();
+		}
+	};
+
 	const columns: ColumnDef<Case>[] = [
 		{ accessorKey: "idCase", header: "Número de Caso" },
 		{ accessorKey: "title", header: "Nombre" },
@@ -129,5 +164,6 @@ export default function useCasesPage() {
 		isAdmin,
 		cases,
 		columns,
+		download,
 	};
 }

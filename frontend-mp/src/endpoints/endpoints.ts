@@ -5,4 +5,5 @@ export const ENDPOINTS = Object.freeze({
 	getUsersFiscalia: "/fiscalia/*",
 	assignUserCase: "/case/assign",
 	getCases: "/case",
+	downloadXMLCase: "/case/xml",
 });
