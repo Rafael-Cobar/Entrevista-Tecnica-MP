@@ -7,7 +7,7 @@ import { getErrorAxios } from "@/utils/errorAxios";
 import { useStoreGlobal } from "@/store/zustand/global/useStoreGlobal";
 import { toast } from "sonner";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Edit, Trash, UserRoundPen } from "lucide-react";
+import { Edit, Eye, UserRoundPen } from "lucide-react";
 import { TooltipCustom } from "@/components/tooltip/TooltipCustom";
 import { useStoreCase } from "@/store/zustand/case/useStoreCase";
 import { useNavigate } from "react-router-dom";
@@ -47,7 +47,7 @@ export default function useCasesPage() {
 		}
 	};
 
-	const changeFiscal = (data: Case) => {
+	const selectCase = (data: Case) => {
 		setDataCase({
 			id: data.idCase,
 			title: data.title,
@@ -64,9 +64,18 @@ export default function useCasesPage() {
 				identification: data.identification,
 			},
 		});
+	};
+
+	const changeFiscal = (data: Case) => {
+		selectCase(data);
 		navigate(
 			`${ROUTES.case_management.assign_user.path_navigate}/${data.idCase}`,
 		);
+	};
+
+	const viewCase = (data: Case) => {
+		selectCase(data);
+		navigate(ROUTES.case_management.case);
 	};
 
 	const columns: ColumnDef<Case>[] = [
@@ -81,6 +90,15 @@ export default function useCasesPage() {
 				const data = row.original;
 				return (
 					<div className="flex gap-2 justify-center">
+						<TooltipCustom content={"Ver caso"}>
+							<button
+								type="button"
+								onClick={() => viewCase(data)}
+								className="text-green-600 hover:text-green-800"
+							>
+								<Eye size={18} />
+							</button>
+						</TooltipCustom>
 						{isAdmin && data.idProcessState === 1 && (
 							<TooltipCustom
 								content={data.idUser ? "Cambiar fiscal" : "Asignar fiscal"}
@@ -100,13 +118,6 @@ export default function useCasesPage() {
 							className="text-blue-600 hover:text-blue-800"
 						>
 							<Edit size={18} />
-						</button>
-						<button
-							type="button"
-							onClick={() => alert(`Eliminar caso ${data.idCase}`)}
-							className="text-red-600 hover:text-red-800"
-						>
-							<Trash size={18} />
 						</button>
 					</div>
 				);

@@ -45,27 +45,25 @@ const AssignUserPage = () => {
 						</div>
 					</div>
 
-					{dataCase.fiscal?.names && (
-						<div>
-							<h3 className="text-lg font-bold text-gray-800 border-b pb-2 mb-4">
-								Fiscal
-							</h3>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-								<TextLabel
-									subtitle="Nombre"
-									text={dataCase.fiscal?.names ?? ""}
-								/>
-								<TextLabel
-									subtitle="Apellidos"
-									text={dataCase.fiscal?.lastNames ?? ""}
-								/>
-								<TextLabel
-									subtitle="CUI"
-									text={dataCase.fiscal?.identification ?? ""}
-								/>
-							</div>
+					<div>
+						<h3 className="text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+							Fiscal
+						</h3>
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<TextLabel
+								subtitle="Nombre"
+								text={dataCase.fiscal?.names ?? ""}
+							/>
+							<TextLabel
+								subtitle="Apellidos"
+								text={dataCase.fiscal?.lastNames ?? ""}
+							/>
+							<TextLabel
+								subtitle="CUI"
+								text={dataCase.fiscal?.identification ?? ""}
+							/>
 						</div>
-					)}
+					</div>
 				</div>
 
 				<div className="bg-white rounded-2xl shadow p-4">

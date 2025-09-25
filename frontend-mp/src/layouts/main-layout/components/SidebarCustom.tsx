@@ -12,11 +12,20 @@ import {
 	SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { ROUTES } from "@/routes/routes";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { items } from "../routes-main-layout";
 import { LogOutIcon } from "lucide-react";
+import { useStoreAuth } from "@/store/zustand/auth/useStoreAuth";
 
 const SidebarCustom = () => {
+	const navigate = useNavigate();
+	const clear = useStoreAuth((state) => state.clearData);
+
+	const logout = () => {
+		clear();
+		navigate(ROUTES.login);
+	};
+
 	return (
 		<Sidebar
 			collapsible="icon"
@@ -59,10 +68,14 @@ const SidebarCustom = () => {
 				<SidebarMenu>
 					<SidebarMenuItem>
 						<SidebarMenuButton asChild>
-							<NavLink to={ROUTES.home} className={"flex items-center"}>
+							<button
+								type="button"
+								onClick={logout}
+								className={"flex items-center"}
+							>
 								<LogOutIcon size={22} />
 								<span className="text-base font-medium">Cerrar sesión</span>
-							</NavLink>
+							</button>
 						</SidebarMenuButton>
 					</SidebarMenuItem>
 				</SidebarMenu>
