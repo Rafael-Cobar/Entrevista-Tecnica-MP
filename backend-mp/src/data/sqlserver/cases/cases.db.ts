@@ -1,4 +1,5 @@
 import type { InsertCaseDTO } from "../../../domain/dtos/case/insert-case.dto.js";
+import type { UpdateCaseDTO } from "../../../domain/dtos/case/update-case.dto.js";
 import { ProcessStates } from "../../../domain/states/states.js";
 import type { IGetCase, NewCase } from "../../../interface/case/case.interface.js";
 import { Database } from "../sqlserver-database.js";
@@ -118,6 +119,27 @@ export class CasesDB {
 		} catch (error) {
 			console.error("Error obtener caso:", error);
 			return null;
+		}
+	}
+
+	public async updateCase(dataCase: UpdateCaseDTO): Promise<boolean> {
+		try {
+			const { id, title, description, idFiscalia } = dataCase;
+			const db = Database.getInstance();
+			const pool = await db.connect();
+			const result = await pool
+				.request()
+				.input("id_caso", id)
+				.input("titulo", title)
+				.input("descripcion", description)
+				.input("id_fiscalia", idFiscalia)
+				.execute("sp_ActualizarCaso");
+
+			const updated = result.returnValue === 1;
+			return updated;
+		} catch (error) {
+			console.error("Error updating case:", error);
+			return false;
 		}
 	}
 }
