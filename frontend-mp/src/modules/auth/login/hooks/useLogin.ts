@@ -8,6 +8,8 @@ import { ROUTES } from "../../../../routes/routes";
 import { getErrorAxios } from "../../../../utils/errorAxios";
 import type { LoginResponse } from "../interface/login.interface";
 import { loginSchema } from "../validators/loginSchema";
+import { useStoreAuth } from "../../../../store/zustand/auth/useStoreAuth";
+import { useState } from "react";
 
 type FormLogin = {
 	identification: string;
@@ -16,6 +18,8 @@ type FormLogin = {
 
 export default function useLogin() {
 	const navigate = useNavigate();
+	const [isLoading, setIsLoading] = useState(false);
+	const setData = useStoreAuth.getState().setData;
 
 	const {
 		formState: { errors },
@@ -31,19 +35,25 @@ export default function useLogin() {
 	});
 
 	const onSubmit = handleSubmit(async (data) => {
+		if (isLoading) return;
+		setIsLoading(true);
 		try {
-			await postAxios<LoginResponse>({
+			const loginRes = await postAxios<LoginResponse>({
 				url: ENDPOINTS.postLogin,
 				body: data,
 			});
+			setData({ authenticated: true, user: loginRes.user });
 			navigate(ROUTES.home);
 		} catch (error: unknown) {
 			toast.error(getErrorAxios(error));
+		} finally {
+			setIsLoading(false);
 		}
 	});
 
 	return {
 		errors,
+		isLoading,
 		register,
 		onSubmit,
 	};

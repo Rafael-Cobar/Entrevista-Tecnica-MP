@@ -493,25 +493,6 @@ BEGIN
 END;
 
 
--- =========================================================================================================================
-CREATE OR ALTER PROCEDURE sp_UsuarioActivo
-    @id_usuario INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- Devuelve 1 si el usuario existe y está activo, 0 si no
-    SELECT 
-        CASE 
-            WHEN EXISTS (
-                SELECT 1
-                FROM Usuarios
-                WHERE id_usuario = @id_usuario
-                  AND id_estado = 1
-            ) THEN CAST(1 AS BIT)
-            ELSE CAST(0 AS BIT)
-        END AS activo;
-END;
 
 -- =========================================================================================================================
 CREATE OR ALTER PROCEDURE sp_UsuarioActivo
@@ -521,14 +502,115 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT 
-        CASE 
-            WHEN EXISTS (
-                SELECT 1
-                FROM Usuarios
-                WHERE id_usuario = @id_usuario
-                  AND id_estado = 1
-            ) 
-            THEN CAST(1 AS BIT) 
-            ELSE CAST(0 AS BIT) 
-        END AS activo;
+        u.id_usuario,
+        u.no_identificacion,
+        u.nombres,
+        u.apellidos,
+        u.fecha_nac,
+        u.correo,
+        u.contrasenia,
+        r.id_rol,
+        r.nombre AS rol
+    FROM Usuarios u
+    INNER JOIN Usuario_Roles ur ON u.id_usuario = ur.id_usuario
+    INNER JOIN Roles r ON ur.id_rol = r.id_rol
+    WHERE u.id_usuario = @id_usuario
+      AND u.id_estado = 1
+      AND ur.id_estado = 1;
 END;
+
+
+-- =========================================================================================================================
+CREATE OR ALTER PROCEDURE sp_ActualizarCaso
+    @id_caso INT,
+    @titulo NVARCHAR(100) = NULL,
+    @descripcion NVARCHAR(MAX) = NULL,
+    @id_fiscalia INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @resultado INT = 0;
+
+    IF EXISTS (
+        SELECT 1 
+        FROM Casos
+        WHERE id_caso = @id_caso
+          AND id_estado_proceso = 1
+    )
+    BEGIN
+        UPDATE Casos
+        SET 
+            titulo = ISNULL(@titulo, titulo),
+            descripcion = ISNULL(@descripcion, descripcion),
+            id_fiscalia = ISNULL(@id_fiscalia, id_fiscalia),
+            fecha_actualizacion = SYSDATETIME()
+        WHERE id_caso = @id_caso;
+
+        SET @resultado = 1;
+    END
+
+    RETURN @resultado;
+END;
+
+-- =========================================================================================================================
+-- SP para obtener las asignaciones de usuarios de un caso
+CREATE OR ALTER PROCEDURE sp_GetCaseAssignments
+    @id_caso INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT
+        ac.id_asignacion,
+        ac.fecha_creacion,
+        ac.fecha_actualizacion,
+        ac.id_usuario,
+        u.nombres + ' ' + u.apellidos AS usuario,
+        u.no_identificacion,
+        ac.id_estado,
+        e.nombre AS estado
+    FROM Asignaciones_Caso ac
+    INNER JOIN Usuarios u ON ac.id_usuario = u.id_usuario
+    INNER JOIN Estados e ON ac.id_estado = e.id_estado
+    WHERE ac.id_caso = @id_caso
+    ORDER BY ac.fecha_creacion DESC;
+END;
+
+-- =========================================================================================================================
+-- SP para obtener la bitácora de un caso
+CREATE OR ALTER PROCEDURE sp_GetCaseBitacora
+    @id_caso INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        b.id_bitacora,
+        b.fecha,
+        b.motivo,
+        b.id_tipo_bitacora,
+        t.nombre AS tipo_bitacora,
+        b.id_estado_proceso_anterior,
+        ep_ant.nombre AS estado_proceso_anterior,
+        b.id_estado_proceso_actual,
+        ep_act.nombre AS estado_proceso_actual,
+        b.id_usuario_anterior,
+        u_ant.nombres + ' ' + u_ant.apellidos AS usuario_anterior,
+        b.id_usuario_actual,
+        u_act.nombres + ' ' + u_act.apellidos AS usuario_actual
+    FROM Bitacora_Caso b
+    INNER JOIN Tipo_Bitacora t ON b.id_tipo_bitacora = t.id_tipo_bitacora
+    LEFT JOIN Estados_Proceso ep_ant ON b.id_estado_proceso_anterior = ep_ant.id_estado_proceso
+    LEFT JOIN Estados_Proceso ep_act ON b.id_estado_proceso_actual = ep_act.id_estado_proceso
+    LEFT JOIN Usuarios u_ant ON b.id_usuario_anterior = u_ant.id_usuario
+    LEFT JOIN Usuarios u_act ON b.id_usuario_actual = u_act.id_usuario
+    WHERE b.id_caso = @id_caso
+    ORDER BY b.fecha DESC;
+END;
+
+-- =========================================================================================================================
+
+
+-- =========================================================================================================================
+
+-- =========================================================================================================================

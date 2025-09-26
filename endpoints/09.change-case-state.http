@@ -1,0 +1,9 @@
+###
+PATCH http://localhost:4000/case/state
+Content-Type: application/json
+
+{
+  "idCase": 1005,
+  "idState": 3,
+  "idUser": 3
+}
