@@ -1,8 +1,12 @@
-import axios, { type AxiosResponse, type Method } from "axios";
+import axios, {
+	type AxiosResponse,
+	type Method,
+	type ResponseType,
+} from "axios";
 
-const API = import.meta.env.VITE_API;
+export const API = import.meta.env.VITE_API;
 
-const instanceAxios = axios.create({
+export const instanceAxios = axios.create({
 	withCredentials: true,
 	baseURL: API,
 });
@@ -25,6 +29,7 @@ interface RequestOptions {
 	body?: Record<string, unknown>;
 	params?: Record<string, unknown>;
 	headersExtras?: Record<string, string>;
+	responseType?: ResponseType;
 }
 
 const getHeaders = (
@@ -42,6 +47,7 @@ const request = async <T = any>({
 	body = {},
 	params = {},
 	headersExtras = {},
+	responseType = "json",
 }: RequestOptions): Promise<T> => {
 	try {
 		const response: AxiosResponse<ResponseApi<T>> = await instanceAxios({
@@ -50,6 +56,7 @@ const request = async <T = any>({
 			data: body,
 			params,
 			headers: getHeaders(headersExtras),
+			responseType,
 		});
 
 		return response.data.data as T;

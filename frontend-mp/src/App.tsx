@@ -1,11 +1,13 @@
 import { RouterProvider } from "react-router-dom";
 import { Toaster } from "sonner";
 import { router } from "./routes/Index-Router";
+import LoaderGlobal from "./components/loader/LoaderGlobal.component";
 
 const App = () => {
 	return (
 		<>
 			<RouterProvider router={router} />
+			<LoaderGlobal />
 			<Toaster
 				theme="system"
 				position="bottom-right"

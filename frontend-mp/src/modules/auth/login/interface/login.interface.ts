@@ -8,7 +8,7 @@ export interface User {
 	identification: string;
 	names: string;
 	lastNames: string;
-	birthDate: Date;
+	birthDate: string;
 	email: string;
 	roles: Role[];
 }

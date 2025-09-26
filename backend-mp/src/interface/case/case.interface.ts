@@ -8,8 +8,8 @@ export interface IGetCase {
 	processState: string;
 	date: string;
 	idFiscalia: number;
-	idAssignUser: number;
-	idUser: number;
+	idAssignUser: number | null;
+	idUser: number | null;
 }
 
 export interface NewCase {

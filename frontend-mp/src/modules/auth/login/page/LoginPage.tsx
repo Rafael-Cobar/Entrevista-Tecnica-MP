@@ -1,8 +1,9 @@
 import InputCustom from "../../../../components/forms/InputCustom";
+import LoaderSmall from "../../../../components/loader/LoaderSmall.component";
 import useLogin from "../hooks/useLogin";
 
 const LoginPage = () => {
-	const { errors, onSubmit, register } = useLogin();
+	const { errors, isLoading, onSubmit, register } = useLogin();
 	return (
 		<div className="flex h-screen w-screen">
 			<div className="w-1/2 flex items-center justify-center bg-blue-900">
@@ -26,12 +27,18 @@ const LoginPage = () => {
 							register={register("password")}
 							inputProps={{ type: "password" }}
 						/>
-						<button
-							type="submit"
-							className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-						>
-							Iniciar sesión
-						</button>
+						{!isLoading ? (
+							<button
+								type="submit"
+								className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+							>
+								Iniciar sesión
+							</button>
+						) : (
+							<div className="flex justify-center">
+								<LoaderSmall />
+							</div>
+						)}
 					</form>
 				</div>
 			</div>

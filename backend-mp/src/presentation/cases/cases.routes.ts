@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import { CasesDB } from '../../data/sqlserver/cases/cases.db.js';
-import { CasesService } from './cases.service.js';
-import { FiscaliasDB } from '../../data/sqlserver/fiscalias/fiscalias.db.js';
-import { CasesController } from './cases.controller.js';
+import { Router } from "express";
+import { CasesDB } from "../../data/sqlserver/cases/cases.db.js";
+import { CasesService } from "./cases.service.js";
+import { FiscaliasDB } from "../../data/sqlserver/fiscalias/fiscalias.db.js";
+import { CasesController } from "./cases.controller.js";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: E
 export class CasesRoutes {
@@ -14,9 +14,13 @@ export class CasesRoutes {
 		const casesService = new CasesService(casesDB, fiscaliasDB);
 		const casesController = new CasesController(casesService);
 
-		router.post('/', casesController.insertCase);
-		router.post('/assign', casesController.assignUseToCase);
-		router.get('/:idUser', casesController.getCases);
+		router.post("/", casesController.insertCase);
+		router.post("/assign", casesController.assignUseToCase);
+		router.get("/byId/:idCase", casesController.dataCaseById);
+		router.get("/xml/:idUser", casesController.getCasesXML);
+		router.get("/:idUser", casesController.getCases);
+		router.patch("/state", casesController.changeCaseProcessState);
+		router.patch("/:id", casesController.updateCase);
 
 		return router;
 	}
