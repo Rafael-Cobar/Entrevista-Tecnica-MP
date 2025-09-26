@@ -7,7 +7,7 @@ import { getErrorAxios } from "@/utils/errorAxios";
 import { useStoreGlobal } from "@/store/zustand/global/useStoreGlobal";
 import { toast } from "sonner";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Edit, Eye, Rocket, UserRoundPen } from "lucide-react";
+import { Edit, Eye, UserRoundPen } from "lucide-react";
 import { TooltipCustom } from "@/components/tooltip/TooltipCustom";
 import { useStoreCase } from "@/store/zustand/case/useStoreCase";
 import { useNavigate } from "react-router-dom";
