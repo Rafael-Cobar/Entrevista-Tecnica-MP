@@ -4,7 +4,6 @@ import { useStoreCase } from "@/store/zustand/case/useStoreCase";
 import { ROUTES } from "@/routes/routes";
 
 export default function useHookViewCase() {
-	// const [isLoading, setIsLoading] = useState(false);
 	const dataCase = useStoreCase((state) => state.data);
 	const navigate = useNavigate();
 

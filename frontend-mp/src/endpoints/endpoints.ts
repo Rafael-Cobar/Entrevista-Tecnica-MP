@@ -6,4 +6,5 @@ export const ENDPOINTS = Object.freeze({
 	assignUserCase: "/case/assign",
 	getCases: "/case",
 	downloadXMLCase: "/case/xml",
+	changeCaseState: "/case/state",
 });

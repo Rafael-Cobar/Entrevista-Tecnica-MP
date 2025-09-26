@@ -12,7 +12,7 @@ import { TooltipCustom } from "@/components/tooltip/TooltipCustom";
 import { useStoreCase } from "@/store/zustand/case/useStoreCase";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
-import axios from "axios";
+import ChangeCaseState from "../components/change-state/ChangeCaseState";
 
 export default function useCasesPage() {
 	const roles = useStoreAuth((state) => state.user.roles);
@@ -117,7 +117,26 @@ export default function useCasesPage() {
 		{ accessorKey: "idCase", header: "Número de Caso" },
 		{ accessorKey: "title", header: "Nombre" },
 		{ accessorKey: "fiscalia", header: "Fiscalia" },
-		{ accessorKey: "processState", header: "Estado de proceso" },
+		{
+			id: "stateProc",
+			header: "Estado de proceso",
+			cell: ({ row }) => {
+				const data = row.original;
+				return (
+					<span
+						className={`${
+							data.idProcessState === 1
+								? "bg-gray-500"
+								: data.idProcessState === 2
+									? "bg-blue-500"
+									: "bg-green-500"
+						} text-white rounded-2xl py-1 px-3 text-[12px] font-bold`}
+					>
+						{data.processState}
+					</span>
+				);
+			},
+		},
 		{
 			id: "actions",
 			header: "Acciones",
@@ -147,13 +166,18 @@ export default function useCasesPage() {
 								</button>
 							</TooltipCustom>
 						)}
-						<button
-							type="button"
-							onClick={() => alert(`Editar caso ${data.idCase}`)}
-							className="text-blue-600 hover:text-blue-800"
-						>
-							<Edit size={18} />
-						</button>
+						{data.idProcessState !== 3 && (
+							<ChangeCaseState data={data} onClose={() => getCases(isAdmin)} />
+						)}
+						{isAdmin && data.idProcessState === 1 && (
+							<button
+								type="button"
+								onClick={() => alert(`Editar caso ${data.idCase}`)}
+								className="text-blue-600 hover:text-blue-800"
+							>
+								<Edit size={18} />
+							</button>
+						)}
 					</div>
 				);
 			},
