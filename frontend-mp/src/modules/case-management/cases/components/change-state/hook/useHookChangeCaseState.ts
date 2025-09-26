@@ -1,10 +1,8 @@
 import { useState } from "react";
 import type { Case } from "../../../interface/cases.interface";
-import { useStoreCase } from "@/store/zustand/case/useStoreCase";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { getErrorAxios } from "@/utils/errorAxios";
-import ChangeCaseState from "../ChangeCaseState";
 import { patchAxios } from "@/libs/axios.adapter";
 import { ENDPOINTS } from "@/endpoints/endpoints";
 import { useStoreAuth } from "@/store/zustand/auth/useStoreAuth";
