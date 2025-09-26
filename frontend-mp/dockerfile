@@ -1,0 +1,31 @@
+# Stage 1: Build
+FROM node:20.18-alpine AS build
+
+# Definimos los argumentos
+ARG VITE_API
+
+# Definimos las variables de entorno utilizadas en el proyecto
+ENV VITE_API=$VITE_API
+
+# Creamos el directorio de trabajo
+WORKDIR /usr/src/app
+
+# Copiamos los archivos necesarios
+COPY package*.json ./
+
+# Instalamos las dependencias
+RUN npm install
+
+# Copiamos el resto de los archivos
+COPY . .
+
+# Construimos la aplicación
+RUN npm run build --prod
+
+# Stage 2: ServeApp
+FROM nginx:1.27.2-alpine
+
+# Copiar archivos construidos
+COPY --from=build /usr/src/app/dist/ /usr/share/nginx/html
+
+EXPOSE 80 443

@@ -1,8 +1,23 @@
+import { RouterProvider } from "react-router-dom";
+import { Toaster } from "sonner";
+import { router } from "./routes/Index-Router";
+import LoaderGlobal from "./components/loader/LoaderGlobal.component";
+
 const App = () => {
 	return (
-		<div>
-			<h1 className="font-bold text-3xl">Casos - MP</h1>
-		</div>
+		<>
+			<RouterProvider router={router} />
+			<LoaderGlobal />
+			<Toaster
+				theme="system"
+				position="bottom-right"
+				dir="auto"
+				visibleToasts={6}
+				duration={5000}
+				closeButton
+				richColors
+			/>
+		</>
 	);
 };
 
