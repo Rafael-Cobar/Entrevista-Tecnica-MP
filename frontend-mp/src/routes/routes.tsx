@@ -9,5 +9,9 @@ export const ROUTES = Object.freeze({
 			path: "/cases/update-user/:idCase",
 			path_navigate: "/cases/update-user",
 		},
+		update: {
+			path: "/cases/update/:idCase",
+			to: "/cases/update",
+		},
 	},
 });

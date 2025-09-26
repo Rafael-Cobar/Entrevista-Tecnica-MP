@@ -22,6 +22,9 @@ const LazyCases = lazy(
 const LazyViewCase = lazy(
 	() => import("../modules/case-management/view-case/Page/ViewCasePage"),
 );
+const LazyUpdateCase = lazy(
+	() => import("../modules/case-management/update-case/page/UpdateCasePage"),
+);
 
 export const router = createBrowserRouter([
 	{
@@ -45,6 +48,10 @@ export const router = createBrowserRouter([
 							{
 								path: ROUTES.case_management.assign_user.path,
 								element: <LazyAssignUserCase />,
+							},
+							{
+								path: ROUTES.case_management.update.path,
+								element: <LazyUpdateCase />,
 							},
 						],
 					},

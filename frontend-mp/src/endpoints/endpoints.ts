@@ -8,4 +8,5 @@ export const ENDPOINTS = Object.freeze({
 	downloadXMLCase: "/case/xml",
 	changeCaseState: "/case/state",
 	getCaseById: "/case/byId",
+	updateCase: "/case",
 });

@@ -7,7 +7,7 @@ import { getErrorAxios } from "@/utils/errorAxios";
 import { useStoreGlobal } from "@/store/zustand/global/useStoreGlobal";
 import { toast } from "sonner";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Edit, Eye, UserRoundPen } from "lucide-react";
+import { Edit, Eye, Rocket, UserRoundPen } from "lucide-react";
 import { TooltipCustom } from "@/components/tooltip/TooltipCustom";
 import { useStoreCase } from "@/store/zustand/case/useStoreCase";
 import { useNavigate } from "react-router-dom";
@@ -77,6 +77,11 @@ export default function useCasesPage() {
 	const viewCase = (data: Case) => {
 		selectCase(data);
 		navigate(ROUTES.case_management.case);
+	};
+
+	const updateCase = (data: Case) => {
+		selectCase(data);
+		navigate(`${ROUTES.case_management.update.to}/${data.idCase}`);
 	};
 
 	const download = async () => {
@@ -170,13 +175,15 @@ export default function useCasesPage() {
 							<ChangeCaseState data={data} onClose={() => getCases(isAdmin)} />
 						)}
 						{isAdmin && data.idProcessState === 1 && (
-							<button
-								type="button"
-								onClick={() => alert(`Editar caso ${data.idCase}`)}
-								className="text-blue-600 hover:text-blue-800"
-							>
-								<Edit size={18} />
-							</button>
+							<TooltipCustom content={"Editar Caso"}>
+								<button
+									type="button"
+									onClick={() => updateCase(data)}
+									className="text-blue-600 hover:text-blue-800"
+								>
+									<Edit size={18} />
+								</button>
+							</TooltipCustom>
 						)}
 					</div>
 				);
