@@ -11,6 +11,13 @@ export interface Case {
 	fiscalia: Fiscalia;
 	fiscal?: Fiscal | null;
 	processState: string;
+	assignments?: Assignment[];
+	logs?: Log[];
+}
+
+export interface caseResponse {
+	assignments: Assignment[];
+	logs: Log[];
 }
 
 export interface Fiscalia {
@@ -23,4 +30,22 @@ export interface Fiscal {
 	names: string | null;
 	lastNames: string | null;
 	identification: string | null;
+}
+
+export interface Assignment {
+	idAssignment: number;
+	dateCreated: Date;
+	dateUpdated: null;
+	user: string;
+	identification: string;
+	state: string;
+}
+
+export interface Log {
+	idBitacora: number;
+	date: Date;
+	reason: null;
+	typeLog: string;
+	currentProcess: string;
+	currentUser: string;
 }

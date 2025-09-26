@@ -9,4 +9,7 @@ export const initialDataCase: Case = {
 		label: "",
 	},
 	fiscal: null,
+	processState: "",
+	assignments: [],
+	logs: [],
 };

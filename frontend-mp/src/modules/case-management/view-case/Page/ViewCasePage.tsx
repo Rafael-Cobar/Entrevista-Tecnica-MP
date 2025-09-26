@@ -1,9 +1,10 @@
 import TextLabel from "@/modules/TextLabel/TextLabel";
 import useHookViewCase from "../hooks/useHookViewCase";
 import Title from "@/components/title/Title";
+import TableBasic from "@/components/table/TableBasic";
 
 const ViewCasePage = () => {
-	const { dataCase } = useHookViewCase();
+	const { dataCase, columnsAssignments, columnsLogs } = useHookViewCase();
 	return (
 		<section>
 			<Title title="Información del caso" />
@@ -40,17 +41,44 @@ const ViewCasePage = () => {
 						Fiscal
 					</h3>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-						<TextLabel subtitle="Nombre" text={dataCase.fiscal?.names ?? ""} />
+						<TextLabel
+							subtitle="Nombre"
+							text={dataCase.fiscal?.names ?? "Sin asignar"}
+						/>
 						<TextLabel
 							subtitle="Apellidos"
-							text={dataCase.fiscal?.lastNames ?? ""}
+							text={dataCase.fiscal?.lastNames ?? "Sin asignar"}
 						/>
 						<TextLabel
 							subtitle="CUI"
-							text={dataCase.fiscal?.identification ?? ""}
+							text={dataCase.fiscal?.identification ?? "Sin asignar"}
 						/>
 					</div>
 				</div>
+			</div>
+			<div className="rounded-lg border bg-white p-4 shadow-sm mt-4">
+				<h2 className="text-xl font-bold text-gray-800 border-b pb-2 mb-4">
+					Bitácora
+				</h2>
+				<TableBasic
+					data={dataCase.logs ?? []}
+					headers={columnsLogs}
+					onClickRow={() => {}}
+					dataSizeDefault={10}
+					isLoading={false}
+				/>
+			</div>
+			<div className="rounded-lg border bg-white p-4 shadow-sm mt-4">
+				<h2 className="text-xl font-bold text-gray-800 border-b pb-2 mb-4">
+					Asignaciones
+				</h2>
+				<TableBasic
+					data={dataCase.assignments ?? []}
+					headers={columnsAssignments}
+					onClickRow={() => {}}
+					dataSizeDefault={10}
+					isLoading={false}
+				/>
 			</div>
 		</section>
 	);
